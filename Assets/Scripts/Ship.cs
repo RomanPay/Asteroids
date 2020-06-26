@@ -8,6 +8,8 @@ using UnityEngine;
 /// </summary>
 public class Ship : MonoBehaviour
 {
+    [SerializeField] private GameObject prefabBullet;
+    
     // thrust and rotation support
     private Rigidbody2D _rigidbody2D;
     private Vector2 _thrustDirection = new Vector2(1, 0);
@@ -43,6 +45,13 @@ public class Ship : MonoBehaviour
             float zRotation = transform.eulerAngles.z * Mathf.Deg2Rad;
             _thrustDirection = new Vector2(Mathf.Cos(zRotation), Mathf.Sin(zRotation));
         }
+
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            GameObject bullet = Instantiate(prefabBullet, transform.position, Quaternion.identity);
+            bullet.GetComponent<Bullet>().ApplyForce(_thrustDirection);
+            
+        }
     }
     
     /// <summary>
@@ -59,7 +68,7 @@ public class Ship : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.tag == "Asteroid")
+        if (other.gameObject.CompareTag("Asteroid"))
         {
             Destroy(gameObject);
         }

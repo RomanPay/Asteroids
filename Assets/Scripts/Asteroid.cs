@@ -33,7 +33,7 @@ public class Asteroid : MonoBehaviour
         transform.position = location;
         // Apply impulse force and set direction for asteroid 
         const float minImpulseAster = 1;
-        const float maxImpulseAster = 5;
+        const float maxImpulseAster = 2;
         float angle = 0f;
 
         switch (direction)
@@ -55,5 +55,14 @@ public class Asteroid : MonoBehaviour
         float magnitude = Random.Range(minImpulseAster, maxImpulseAster);
         
         GetComponent<Rigidbody2D>().AddForce(moveDirection * magnitude, ForceMode2D.Impulse);
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Bullet"))
+        {
+            Destroy(gameObject);
+            Destroy(other.gameObject);
+        }
     }
 }

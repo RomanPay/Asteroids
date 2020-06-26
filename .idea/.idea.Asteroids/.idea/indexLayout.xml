@@ -28,7 +28,6 @@
       <Path>Logs</Path>
       <Path>Temp</Path>
       <Path>obj</Path>
-      <Path>Новая папка</Path>
     </explicitExcludes>
   </component>
 </project>
