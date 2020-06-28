@@ -8,7 +8,11 @@ using UnityEngine;
 /// </summary>
 public class Ship : MonoBehaviour
 {
+    // Shooting support
     [SerializeField] private GameObject prefabBullet;
+    
+    // Death support
+    [SerializeField] private GameObject hud; 
     
     // thrust and rotation support
     private Rigidbody2D _rigidbody2D;
@@ -46,11 +50,12 @@ public class Ship : MonoBehaviour
             _thrustDirection = new Vector2(Mathf.Cos(zRotation), Mathf.Sin(zRotation));
         }
 
+        // shoot as appropriate
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
             GameObject bullet = Instantiate(prefabBullet, transform.position, Quaternion.identity);
             bullet.GetComponent<Bullet>().ApplyForce(_thrustDirection);
-            
+            AudioManager.Play(AudioClipName.PlayerShot);
         }
     }
     
@@ -66,11 +71,17 @@ public class Ship : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Destroy the ship on collision with an asteroid
+    /// </summary>
+    /// <param name="other">collision info</param>
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Asteroid"))
         {
             Destroy(gameObject);
+            hud.GetComponent<HUD>().StopGameTimer();
+            AudioManager.Play(AudioClipName.PlayerDeath);
         }
     }
 }
